@@ -24,7 +24,44 @@
   /*===== z index =====*/
   --z-back: -10;
   --z-fixed: 100;
+
+  /*===== Light Theme Colors =====*/
+  --body-color: #fff;
+  --text-color: var(--second-color);
+  --nav-bg: #fff;
+  --nav-text: #000;
+  --card-bg: #fff;
+  --shadow-color: rgba(146, 161, 176, 0.15);
 }
+
+/*===== Dark Theme Colors =====*/
+body.dark-theme {
+  --body-color: hsl(var(--hue-color), 28%, 12%);
+  --text-color: #fff;
+  --nav-bg: hsl(var(--hue-color), 28%, 12%);
+  --nav-text: #fff;
+  --card-bg: hsl(var(--hue-color), 28%, 16%);
+  --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+/*===== Theme Toggle Button =====*/
+.nav__toggle-theme {
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+  cursor: pointer;
+}
+
+.theme-icon {
+  font-size: 1.5rem;
+  color: var(--text-color);
+  transition: .3s;
+}
+
+.theme-icon:hover {
+  color: var(--first-color);
+}
+
 @media screen and (min-width: 968px) {
   :root {
     --big-font-size: 3.5rem;
@@ -48,6 +85,8 @@ body {
   font-family: var(--body-font);
   font-size: var(--normal-font-size);
   color: var(--second-color);
+  background-color: var(--body-color);
+  transition: .3s;
 }
 
 h1, h2, p {
@@ -94,6 +133,7 @@ img {
 .section {
   padding-top: 3rem;
   padding-bottom: 2rem;
+  animation: fadeIn 0.8s ease-out;
 }
 
 /*===== LAYOUT =====*/
@@ -110,8 +150,8 @@ img {
   top: 0;
   left: 0;
   z-index: var(--z-fixed);
-  background-color: #fff;
-  box-shadow: 0 1px 4px rgba(146, 161, 176, 0.15);
+  background-color: var(--nav-bg);
+  box-shadow: 0 1px 4px var(--shadow-color);
 }
 
 /*===== NAV =====*/
@@ -139,7 +179,7 @@ img {
 }
 .nav__link {
   position: relative;
-  color: #fff;
+  color: var(--nav-text);
 }
 .nav__link:hover {
   position: relative;
@@ -154,10 +194,10 @@ img {
   background-color: var(--first-color);
 }
 .nav__logo {
-  color: var(--second-color);
+  color: var(--nav-text);
 }
 .nav__toggle {
-  color: var(--second-color);
+  color: var(--nav-text);
   font-size: 1.5rem;
   cursor: pointer;
 }
@@ -282,13 +322,27 @@ img {
   align-items: center;
 }
 .skills__bar {
+  position: relative;
+  overflow: hidden;
+  transition: width 1s ease-in-out;
+}
+.skills__bar::after {
+  content: '';
   position: absolute;
+  top: 0;
   left: 0;
-  bottom: 0;
-  background-color: var(--first-color);
-  height: 0.25rem;
-  border-radius: 0.5rem;
-  z-index: var(--z-back);
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: shine 2s infinite;
+}
+@keyframes shine {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
 .skills__html {
   width: 95%;
@@ -302,12 +356,15 @@ img {
 .skills__ux {
   width: 65%;
 }
+.skills__ja {
+  width: 60%;
+}
 .skills__img {
   border-radius: 0.5rem;
 }
 
 /* ===== WORK =====*/
-.work__container {
+/*.work__container {
   row-gap: 2rem;
 }
 .work__img {
@@ -320,7 +377,94 @@ img {
 }
 .work__img img:hover {
   transform: scale(1.1);
+}*/
+// Colors
+$color-primary-white: rgb(240, 240, 240);
+
+main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 50px;
+  font-family: 'Roboto', sans-serif;
 }
+
+.card {
+  width: 24rem;
+  height: 36rem;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  color: $color-primary-white;
+  box-shadow: 0 4px 8px var(--shadow-color);
+  background-color: var(--card-bg);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+ 
+  img {
+    position: absolute;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0.9;
+    transition: opacity .2s ease-out;
+  }
+
+  h2 {
+    position: absolute;
+    inset: auto auto 30px 30px;
+    margin: 0;
+    transition: inset .3s .3s ease-out;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: normal;
+    text-transform: uppercase;
+  }
+  
+  p, a {
+    position: absolute;
+    opacity: 0;
+    max-width: 80%;
+    transition: opacity .3s ease-out;
+  }
+  
+  p {
+    inset: auto auto 80px 30px;
+  }
+  
+  a {
+    inset: auto auto 40px 30px;
+    color: inherit;
+    text-decoration: none;
+  }
+  
+  &:hover h2 {
+    inset: auto auto 220px 30px;
+    transition: inset .3s ease-out;
+  }
+  
+  &:hover p, &:hover a {
+    opacity: 1;
+    transition: opacity .5s .1s ease-in;
+  }
+  
+  &:hover img {
+    transition: opacity .3s ease-in;
+    opacity: 1;
+  }
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px var(--shadow-color);
+  }
+}
+
+.material-symbols-outlined {
+  vertical-align: middle;
+}
+
 
 /* ===== CONTACT =====*/
 .contact__input {
@@ -332,6 +476,11 @@ img {
   border: 1.5px solid var(--second-color);
   outline: none;
   margin-bottom: var(--mb-4);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.contact__input:focus {
+  border-color: var(--first-color);
+  box-shadow: 0 0 0 2px rgba(var(--first-color), 0.2);
 }
 .cssbuttons-io-button {
   background: #1155f5;
@@ -529,4 +678,151 @@ img {
   .home__img {
     width: 450px;
   }
+}
+
+/*===== Back to Top Button =====*/
+.back-to-top {
+    position: fixed;
+    right: 1rem;
+    bottom: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: .5rem;
+    background-color: var(--first-color);
+    border-radius: .5rem;
+    z-index: var(--z-fixed);
+    transition: .4s;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.back-to-top:hover {
+    background-color: var(--second-color);
+    transform: translateY(-.25rem);
+}
+
+.back-to-top i {
+    font-size: 1.5rem;
+    color: #fff;
+}
+
+/* Show back-to-top button */
+.show-scroll {
+    visibility: visible;
+    opacity: 1;
+}
+
+/*===== ANIMATIONS =====*/
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+/* Enhanced hover effects */
+.nav__link {
+    position: relative;
+    color: var(--nav-text);
+}
+
+.nav__link:hover {
+    position: relative;
+}
+
+.nav__link:hover::after {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 0.18rem;
+    left: 0;
+    top: 2rem;
+    background-color: var(--first-color);
+}
+
+/* Enhanced button styles */
+.button {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.button:active {
+    transform: translateY(-1px);
+}
+
+/* Enhanced card hover effects */
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px var(--shadow-color);
+}
+
+/* Enhanced skills bars */
+.skills__bar {
+    position: relative;
+    overflow: hidden;
+    transition: width 1s ease-in-out;
+}
+
+.skills__bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: shine 2s infinite;
+}
+
+@keyframes shine {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* Enhanced form inputs */
+.contact__input {
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact__input:focus {
+    border-color: var(--first-color);
+    box-shadow: 0 0 0 2px rgba(var(--first-color), 0.2);
+}
+
+/* Loading animation for images */
+.lazy-load {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.lazy-load.loaded {
+    opacity: 1;
 }
